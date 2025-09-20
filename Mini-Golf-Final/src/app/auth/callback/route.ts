@@ -7,13 +7,10 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
+  const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next') ?? '/levels';
-  const requestUrl = new URL(request.url);
-  const origin = requestUrl.origin;
-
 
   if (code) {
     const cookieStore = cookies()

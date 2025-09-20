@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
     )
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
+      // The default redirect is to /levels, which is where we want to go after login.
       return NextResponse.redirect(`${origin}${next}`)
     }
   }

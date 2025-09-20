@@ -22,6 +22,7 @@ function getRedirectUrl() {
   }
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ??
+    // VERCEL_URL is available on vercel builds
     process?.env?.NEXT_PUBLIC_VERCEL_URL ??
     window.location.origin;
   url = url.includes('http') ? url : `https://${url}`;

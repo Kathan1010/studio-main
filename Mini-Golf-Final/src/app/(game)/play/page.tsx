@@ -21,7 +21,7 @@ const GolfCanvas = dynamic(() => import('@/components/game/GolfCanvas'), {
   ),
 });
 
-export default function PlayPage() {
+function PlayArea() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [level, setLevel] = useState<Level | null>(null);
@@ -154,3 +154,17 @@ export default function PlayPage() {
     </div>
   );
 }
+
+export default function PlayPage() {
+  return (
+    <Suspense fallback={
+        <div className="relative w-full h-dvh overflow-hidden bg-background flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <p className="ml-4 text-muted-foreground">Loading level...</p>
+        </div>
+    }>
+      <PlayArea />
+    </Suspense>
+  );
+}
+

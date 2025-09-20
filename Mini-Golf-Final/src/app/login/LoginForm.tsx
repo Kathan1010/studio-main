@@ -15,16 +15,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AuthHeader } from "@/components/layout/AuthHeader";
+
+function getRedirectUrl() {
+  let url =
+    process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+    process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+    'http://localhost:9002/';
+  // Make sure to include `https://` when not localhost.
+  url = url.includes('http') ? url : `https://${url}`;
+  // Make sure to include a trailing `/`.
+  url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
+  url = `${url}auth/callback`;
+  return url;
+}
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
   const view = searchParams.get("view");
+  const [redirectUrl, setRedirectUrl] = useState('');
 
   useEffect(() => {
+    setRedirectUrl(getRedirectUrl());
+
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === "SIGNED_IN") {
@@ -60,7 +76,7 @@ export function LoginForm() {
               view={view === 'sign_up' ? 'sign_up' : 'sign_in'}
               showLinks={true}
               providers={[]}
-              redirectTo={`${new URL(location.href).origin}/auth/callback`}
+              redirectTo={redirectUrl}
             />
           </CardContent>
           <CardFooter className="justify-center text-sm">

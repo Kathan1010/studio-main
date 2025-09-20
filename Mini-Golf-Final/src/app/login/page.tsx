@@ -31,19 +31,18 @@ function getRedirectUrl() {
   return url;
 }
 
-async function handlePasswordReset(email: string): Promise<{ error: any }> {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: getRedirectUrl(),
-    });
-    return { error };
-}
-
-
 export default function ResetPasswordPage() {
     const [email, setEmail] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    const handlePasswordReset = async (email: string): Promise<{ error: any }> => {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: getRedirectUrl(),
+        });
+        return { error };
+    }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -122,4 +121,3 @@ export default function ResetPasswordPage() {
     </div>
   );
 }
-

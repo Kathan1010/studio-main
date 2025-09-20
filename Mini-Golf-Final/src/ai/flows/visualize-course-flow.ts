@@ -1,63 +1,47 @@
-{
-  "name": "nextn",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack -p 9002",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@hookform/resolvers": "^4.1.3",
-    "@radix-ui/react-accordion": "^1.2.3",
-    "@radix-ui/react-alert-dialog": "^1.1.6",
-    "@radix-ui/react-avatar": "^1.1.3",
-    "@radix-ui/react-checkbox": "^1.1.4",
-    "@radix-ui/react-collapsible": "^1.1.11",
-    "@radix-ui/react-dialog": "^1.1.6",
-    "@radix-ui/react-dropdown-menu": "^2.1.6",
-    "@radix-ui/react-label": "^2.1.2",
-    "@radix-ui/react-menubar": "^1.1.6",
-    "@radix-ui/react-popover": "^1.1.6",
-    "@radix-ui/react-progress": "^1.1.2",
-    "@radix-ui/react-radio-group": "^1.2.3",
-    "@radix-ui/react-scroll-area": "^1.2.3",
-    "@radix-ui/react-select": "^2.1.6",
-    "@radix-ui/react-separator": "^1.1.2",
-    "@radix-ui/react-slider": "^1.2.3",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-switch": "^1.1.3",
-    "@radix-ui/react-tabs": "^1.1.3",
-    "@radix-ui/react-toast": "^1.2.6",
-    "@radix-ui/react-tooltip": "^1.1.8",
-    "@supabase/auth-ui-react": "^0.4.7",
-    "@supabase/auth-ui-shared": "^0.1.8",
-    "@supabase/ssr": "^0.4.0",
-    "@supabase/supabase-js": "^2.43.4",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
-    "embla-carousel-react": "^8.6.0",
-    "lucide-react": "^0.475.0",
-    "next": "15.3.3",
-    "react": "^18.3.1",
-    "react-day-picker": "^8.10.1",
-    "react-dom": "^18.3.1",
-    "react-hook-form": "^7.54.2",
-    "recharts": "^2.15.1",
-    "tailwind-merge": "^3.0.1",
-    "tailwindcss-animate": "^1.0.7",
-    "three": "^0.164.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "@types/three": "^0.164.0",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
-  }
+
+'use server';
+
+/**
+ * @fileOverview A flow to visualize a golf course design.
+ *
+ * This file is a placeholder and does not contain a complete implementation.
+ */
+
+import {ai} from '@/ai/genkit';
+import {z} from 'genkit';
+
+const VisualizeCourseInputSchema = z.object({
+  courseDesign: z.string().describe('The textual description of the golf course design.'),
+});
+export type VisualizeCourseInput = z.infer<typeof VisualizeCourseInputSchema>;
+
+const VisualizeCourseOutputSchema = z.object({
+  imageUrl: z.string().describe('A URL to an image visualizing the course design.'),
+});
+export type VisualizeCourseOutput = z.infer<typeof VisualizeCourseOutputSchema>;
+
+export async function visualizeCourse(input: VisualizeCourseInput): Promise<VisualizeCourseOutput> {
+  return visualizeCourseFlow(input);
 }
+
+const prompt = ai.definePrompt({
+  name: 'visualizeCoursePrompt',
+  input: {schema: VisualizeCourseInputSchema},
+  output: {schema: VisualizeCourseOutputSchema},
+  prompt: `Generate an image that represents the following golf course design: {{{courseDesign}}}`,
+});
+
+const visualizeCourseFlow = ai.defineFlow(
+  {
+    name: 'visualizeCourseFlow',
+    inputSchema: VisualizeCourseInputSchema,
+    outputSchema: VisualizeCourseOutputSchema,
+  },
+  async (input) => {
+    // This is a placeholder. A real implementation would use an image generation model.
+    console.log('Visualizing course with input:', input);
+    return {
+      imageUrl: 'https://picsum.photos/seed/golf/800/600',
+    };
+  }
+);

@@ -43,7 +43,7 @@ export function LoginForm() {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        if (event === "SIGNED_IN") {
+        if (session) {
           router.replace("/levels");
         }
       }

@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { supabase } from "@/lib/supabase/client";
@@ -33,7 +32,7 @@ function getRedirectUrl() {
   return url;
 }
 
-export function LoginForm() {
+export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const message = searchParams.get("message");

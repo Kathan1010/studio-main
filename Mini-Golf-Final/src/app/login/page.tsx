@@ -17,10 +17,13 @@ import Link from "next/link";
 import { Loader2 } from 'lucide-react';
 
 function getRedirectUrl() {
+  if (typeof window === 'undefined') {
+    return '';
+  }
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ??
     process?.env?.NEXT_PUBLIC_VERCEL_URL ??
-    'http://localhost:9002/';
+    window.location.origin;
   url = url.includes('http') ? url : `https://${url}`;
   url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
   url = `${url}auth/callback`;
@@ -51,6 +54,17 @@ function LoginComponent() {
   }, [router]);
   
   const currentView = view === 'sign_up' ? 'sign_up' : 'sign_in';
+
+  if (!redirectUrl) {
+    return (
+        <div className="relative min-h-dvh w-full flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 p-4">
+            <AuthHeader />
+            <div className="w-full max-w-sm pt-16 flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+        </div>
+    );
+  }
 
   return (
     <div className="relative min-h-dvh w-full flex items-center justify-center bg-gray-50 dark:bg-gray-900/50 p-4">

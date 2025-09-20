@@ -42,10 +42,12 @@ export function HeroButtons() {
     )
   }
 
+  const playNowHref = user ? '/levels' : '/login?view=sign_up';
+
   return (
     <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
       <Button asChild size="lg">
-        <Link href="/levels">
+        <Link href={playNowHref}>
           Play Now <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
       </Button>
@@ -56,7 +58,7 @@ export function HeroButtons() {
           variant="outline"
           className="text-white border-white bg-transparent hover:bg-white hover:text-primary"
         >
-          <Link href="/login?view=sign_up">Sign Up</Link>
+          <Link href="/login">Sign In</Link>
         </Button>
       )}
     </div>

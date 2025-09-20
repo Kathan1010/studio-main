@@ -18,19 +18,32 @@ import { Mail } from 'lucide-react';
 import Link from 'next/link';
 import { AuthHeader } from '@/components/layout/AuthHeader';
 
-async function handlePasswordReset(email: string): Promise<{ error: any }> {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${location.origin}/auth/callback?next=/`,
-    });
-    return { error };
-}
-
-
 export default function ResetPasswordPage() {
     const [email, setEmail] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    const getRedirectUrl = () => {
+        let url =
+            process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+            process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+            'http://localhost:9002/';
+        // Make sure to include `https://` when not localhost.
+        url = url.includes('http') ? url : `https://${url}`;
+        // Make sure to include a trailing `/`.
+        url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
+        // Point to the root for password reset, which will redirect to /levels if logged in
+        url = `${url}auth/callback?next=/`;
+        return url;
+    }
+
+    const handlePasswordReset = async (email: string): Promise<{ error: any }> => {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: getRedirectUrl(),
+        });
+        return { error };
+    }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -109,4 +122,3 @@ export default function ResetPasswordPage() {
     </div>
   );
 }
-
